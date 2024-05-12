@@ -72,7 +72,7 @@ readIDAT_nonenc <- function(file, what = c("all", "IlluminaID", "nSNPsRead")) {
         }
 
         ## Now read all bytes/characters
-        readChar(con, nchars=n)
+        readChar(con, nchars=n, useBytes=TRUE)
     }
 
     readField <- function(con, field) {
@@ -211,6 +211,7 @@ readIDAT_nonenc <- function(file, what = c("all", "IlluminaID", "nSNPsRead")) {
     names(res) <- res
     res <- res[order(fields[res, "byteOffset"])]
     res <- res[names(res) != "nSNPsRead"]
+    res <- res[c("IlluminaID", "SD", "Mean", "NBeads")] ## only these fields
     res <- lapply(res, function(xx) {
         where <- fields[xx, "byteOffset"]
         seek(con, where = where, origin = "start")
